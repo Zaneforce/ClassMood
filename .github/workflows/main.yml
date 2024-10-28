@@ -19,8 +19,14 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Set environment variable for protobuf
+      run: |
+       export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+       python app.py
 
-
+    - name: Upgrade TensorFlow
+      run: pip install --upgrade tensorflow
+      
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
