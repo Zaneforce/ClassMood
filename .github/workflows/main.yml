@@ -1,4 +1,4 @@
-name: Build and Deploy 
+name: Build and Deploy
 
 on:
   push:
@@ -14,42 +14,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout repository
+    # 1. Checkout code dari repository
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Set up Python environment
+    # 2. Setup Python environment
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'  # Sesuaikan jika perlu
+        python-version: '3.8'  # Pastikan versi sesuai dengan project
 
-    # Install dependencies with Numpy downgrade
+    # 3. Install dependencies dengan downgrade Numpy & set H5Py
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install numpy==1.23.5  # Downgrade Numpy
+        pip install numpy==1.23.5 h5py==3.7.0  # Versi stabil & kompatibel
         pip install --no-cache-dir -r requirements.txt
 
-    # Upgrade TensorFlow (opsional)
+    # 4. Upgrade TensorFlow (opsional jika diperlukan)
     - name: Upgrade TensorFlow
-      run: pip install --upgrade tensorflow
+      run: pip install tensorflow==2.10.0  # Gunakan versi stabil
 
-    # Download model file from Google Drive
-    - name: Download model file from Google Drive
+    # 5. Download file model dari Google Drive
+    - name: Download model file
       run: |
         mkdir -p Implementation
         wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1OUcs0spykBEdNzFRHKAzkLnZAsseZm_0' -O Implementation/model_fer2013.h5
 
-    # Verify installed packages
+    # 6. Verifikasi instalasi package
     - name: Verify installed packages
       run: pip freeze
 
-    # Verify that the model file exists
+    # 7. Verifikasi bahwa model berhasil diunduh
     - name: Verify model file exists
       run: ls -l Implementation/
 
-    # Run the app with protobuf environment variable
+    # 8. Jalankan aplikasi dengan environment protobuf diatur
     - name: Run the app
       env:
         PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: python
